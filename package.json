@@ -1,0 +1,9 @@
+{
+  "name": "humanity-checkpoint",
+  "version": "1.0.0",
+  "description": "Interactive behavior analysis site with CSV export",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
