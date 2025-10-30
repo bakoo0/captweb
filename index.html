@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanity Checkpoint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.umd.min.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="consent-modal" id="consentModal">
+        <div class="consent-card">
+            <h2>Приветствуем вас!</h2>
+            <p>Для улучшения безопасности и качества работы на сайте мы собираем данные о вашем поведении (клики, прокрутка, ввод текста). Согласны ли вы с этим?</p>
+            <div class="consent-actions">
+                <button class="btn primary" id="agreeBtn">Согласен</button>
+                <button class="btn secondary" id="declineBtn">Отказаться</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Humanity Checkpoint</h1>
+            <p>Интерактивная площадка для анализа поведения пользователей и распознавания ботов.</p>
+            <a href="#tests" class="btn primary">Перейти к тестам</a>
+        </div>
+        <nav class="main-nav">
+            <a href="#typing-test">Ввод текста</a>
+            <a href="#click-test">Клик по изображению</a>
+            <a href="#scroll-test">Прокрутка</a>
+            <a href="#interaction-test">Взаимодействия</a>
+            <a href="#analytics">Аналитика</a>
+        </nav>
+    </header>
+
+    <main id="tests">
+        <section id="typing-test" class="card">
+            <div class="section-header">
+                <h2>Тест 1. Написание текста</h2>
+                <p>Введите фразу максимально точно и быстро. Подсказки помогут отследить прогресс и ошибки.</p>
+            </div>
+            <div class="typing-wrapper">
+                <div class="target-sentence" id="targetSentence">Собака бегает по зелёной траве.</div>
+                <textarea id="typingInput" placeholder="Начните ввод..." rows="4"></textarea>
+                <div class="typing-stats">
+                    <div>
+                        <span class="label">Время:</span>
+                        <span id="typingTime">0.0 c</span>
+                    </div>
+                    <div>
+                        <span class="label">Ошибки:</span>
+                        <span id="typingErrors">0</span>
+                    </div>
+                    <div>
+                        <span class="label">Исправления:</span>
+                        <span id="typingCorrections">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="typingProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="click-test" class="card">
+            <div class="section-header">
+                <h2>Тест 2. Клик по изображению</h2>
+                <p>Отслеживаем скорость реакции и частоту кликов. Нажмите «Начать», чтобы изображение появилось в случайном месте.</p>
+            </div>
+            <div class="click-test-wrapper">
+                <div class="click-stats">
+                    <div><span class="label">Клики:</span> <span id="clickCount">0</span></div>
+                    <div><span class="label">Средняя реакция:</span> <span id="reactionTime">–</span></div>
+                </div>
+                <button id="startClickTest" class="btn primary">Начать</button>
+                <div class="click-stage" id="clickStage">
+                    <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=320&q=80" alt="Иконка для клика" id="clickTarget">
+                </div>
+            </div>
+        </section>
+
+        <section id="scroll-test" class="card">
+            <div class="section-header">
+                <h2>Тест 3. Прокрутка страницы</h2>
+                <p>Прокрутите страницу вниз до секции с отметкой. Следите за прогрессом и скоростью прокрутки.</p>
+            </div>
+            <div class="scroll-progress">
+                <div class="progress-bar">
+                    <div id="scrollProgress"></div>
+                </div>
+                <div class="scroll-stats">
+                    <span><span class="label">Средняя скорость:</span> <span id="scrollSpeed">0 px/c</span></span>
+                    <span><span class="label">Вариативность:</span> <span id="scrollVariance">0</span></span>
+                </div>
+            </div>
+            <div class="scroll-content">
+                <p>Листайте, чтобы изучить информацию и дойти до конца блока. Отмеченная область сообщит, когда тест завершён.</p>
+                <div class="scroll-block gradient"></div>
+                <div class="scroll-block"></div>
+                <div class="scroll-target" id="scrollTarget">Вы достигли контрольной точки!</div>
+            </div>
+        </section>
+
+        <section id="interaction-test" class="card">
+            <div class="section-header">
+                <h2>Тест 4. Поведение на странице</h2>
+                <p>Взаимодействуйте с элементами, чтобы собрать данные о типах и длительности действий.</p>
+            </div>
+            <div class="interaction-grid">
+                <div class="interaction-card">
+                    <h3>Цветные кнопки</h3>
+                    <p>Наведите и нажмите, чтобы увидеть эффекты.</p>
+                    <div class="button-row">
+                        <button class="btn accent" data-interaction="colorButton">Лайк</button>
+                        <button class="btn accent" data-interaction="colorButton">Поделиться</button>
+                        <button class="btn accent" data-interaction="colorButton">Сохранить</button>
+                    </div>
+                </div>
+                <div class="interaction-card">
+                    <h3>Мини-форма</h3>
+                    <label class="label">Имя
+                        <input type="text" id="nameField" data-interaction="formField" placeholder="Введите имя">
+                    </label>
+                    <label class="label">Комментарий
+                        <textarea id="commentField" data-interaction="formField" rows="3" placeholder="Ваш комментарий"></textarea>
+                    </label>
+                </div>
+                <div class="interaction-card">
+                    <h3>Ползунок внимания</h3>
+                    <input type="range" min="0" max="100" value="50" id="focusSlider" data-interaction="slider">
+                    <p>Текущий уровень: <span id="sliderValue">50</span>%</p>
+                </div>
+                <div class="interaction-card arrow-card">
+                    <h3>Стрелочные кнопки</h3>
+                    <p>Используйте клавиши со стрелками на клавиатуре — мы фиксируем направление и скорость реакции.</p>
+                    <div class="arrow-pad">
+                        <button class="arrow-btn" data-direction="up" aria-label="Вверх">↑</button>
+                        <div class="arrow-middle">
+                            <button class="arrow-btn" data-direction="left" aria-label="Влево">←</button>
+                            <button class="arrow-btn" data-direction="down" aria-label="Вниз">↓</button>
+                            <button class="arrow-btn" data-direction="right" aria-label="Вправо">→</button>
+                        </div>
+                    </div>
+                    <div class="arrow-stats">
+                        <span><span class="label">Вверх:</span> <span id="arrowUpCount">0</span></span>
+                        <span><span class="label">Вниз:</span> <span id="arrowDownCount">0</span></span>
+                        <span><span class="label">Влево:</span> <span id="arrowLeftCount">0</span></span>
+                        <span><span class="label">Вправо:</span> <span id="arrowRightCount">0</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="interaction-stats">
+                <div><span class="label">Всего взаимодействий:</span> <span id="interactionCount">0</span></div>
+                <div><span class="label">Активное время:</span> <span id="interactionDuration">0.0 c</span></div>
+                <div><span class="label">Наведения:</span> <span id="hoverCount">0</span></div>
+            </div>
+        </section>
+
+        <section id="completion" class="card finish-section">
+            <div class="section-header">
+                <h2>Завершение тестирования</h2>
+                <p>После прохождения всех тестов нажмите «Завершить», чтобы сохранить результаты вашей сессии в общий CSV-файл.</p>
+            </div>
+            <div class="finish-actions">
+                <button id="finishBtn" class="btn success">Завершить</button>
+                <p id="finishMessage" class="finish-message" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <section id="analytics" class="card">
+            <div class="analytics-grid">
+                <div class="chart-card">
+                    <canvas id="typingChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="clickChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="scrollChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="sessionChart"></canvas>
+                </div>
+            </div>
+            <div class="admin-dashboard">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метрика</th>
+                            <th>Значение</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="metricTable">
+                        <tr>
+                            <td>Скорость ввода</td>
+                            <td id="tableTypingSpeed">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                        <tr>
+                            <td>Ошибки ввода</td>
+                            <td id="tableTypingErrors">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                        <tr>
+                            <td>Скорость реакции</td>
+                            <td id="tableReaction">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                        <tr>
+                            <td>Скорость прокрутки</td>
+                            <td id="tableScroll">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                        <tr>
+                            <td>Взаимодействия</td>
+                            <td id="tableInteractions">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                        <tr>
+                            <td>Стрелочные кнопки</td>
+                            <td id="tableArrows">–</td>
+                            <td>Ожидается</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 Humanity Checkpoint. Анализируем поведение для защиты пользователей.</p>
+    </footer>
+</body>
+</html>
